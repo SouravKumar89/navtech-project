@@ -1,0 +1,139 @@
+<div class="container">
+  <h3>Orders List!</h3>
+  
+  <br>
+  <button class="btn btn-light" (click)="logout()" style="float: right; margin:10px;">Log Out</button>
+  <button class="btn btn-primary" (click)="addOrder(addcontent)" style="float: right; margin:10px;">Add Order</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Order No</th>
+        <th scope="col">Due Date</th>
+        <th scope="col">Buyer Name</th>
+        <th scope="col">Address</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Cost</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let order of ordersList; index as i">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ order.orderno }}</td>
+        <td>{{viewdueDate(order.duedate)}}</td>
+        <td>{{ order.buyername }}</td>
+        <td>{{ order.address }}</td>
+        <td>{{ order.phone }}</td>
+        <td>{{ order.cost }}</td>
+        <td>
+          <button class="btn btn-primary" (click)="editOrder(order,addcontent)">Edit</button> &nbsp;
+          <button class="btn btn-danger" (click)="deleteOrder(order, content)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+ <!-- Add/ Edit Modal Pop-up-->
+<ng-template #addcontent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">{{adeditType}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="form-horizontal" [formGroup]="orderForm" id="orderForm" name="orderForm"
+        (submit)="saveOrder()">
+        <div *ngIf="adeditType != 'ADD ORDER'" class="form-group">
+          <input type="number" formControlName="orderno" class="form-control" id="orderno"
+            placeholder="order No" disabled>
+        </div><br>
+
+        <div class="form-group">
+          <label>Buyer Name</label>
+          <input type="text" formControlName="buyername" class="form-control" id="buyername"
+            placeholder="Enter Buyer Name" maxlength="50">
+          <div
+            *ngIf="orderForm.controls.buyername.errors?.required  && (!orderForm.controls.buyername.pristine || submitButton)"
+            class="text-danger">
+            Please enter buyer name
+          </div>
+        </div><br>
+        
+        <div class="form-group">
+          <label>Due Date</label>
+          <div class="form-group">
+            <div class="input-group">
+              <input class="form-control" placeholder="yyyy-mm-dd"
+                     name="dp" formControlName="duedate" ngbDatepicker #d="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button"></button>
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="orderForm.controls.duedate.errors?.required  && (!orderForm.controls.duedate.pristine || submitButton)"
+            class="text-danger">
+            Please enter due date
+          </div>
+        </div><br>
+
+        <div class="form-group">
+          <label>Adress</label>
+          <input type="text" formControlName="address" class="form-control" id="address"
+            placeholder="Enter address" maxlength="50">
+          <div
+            *ngIf="orderForm.controls.address.errors?.required  && (!orderForm.controls.address.pristine || submitButton)"
+            class="text-danger">
+            Please enter address
+          </div>
+        </div><br>
+        
+        <div class="form-group">
+          <label>Phone No</label>
+          <input type="number" formControlName="phone" class="form-control" id="phone"
+            placeholder="Enter phone no" maxlength="10">
+          <div
+            *ngIf="orderForm.controls.phone.errors?.required  && (!orderForm.controls.phone.pristine || submitButton)"
+            class="text-danger">
+            Please enter phone no
+          </div>
+        </div><br>
+
+        <div class="form-group">
+          <label>Total Cost</label>
+          <input type="number" formControlName="cost" class="form-control" id="cost"
+            placeholder="Enter cost">
+          <div *ngIf="orderForm.controls.cost.errors?.required  && (!orderForm.controls.cost.pristine || submitButton)"
+            class="text-danger">
+            Please enter total cost
+          </div>
+        </div><br>
+      </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="saveOrder()">Save</button>
+    <button type="button" class="btn btn-primary" (click)="clear()">Reset</button>
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click'); clear()">Close</button>
+  </div>
+</ng-template>
+
+
+<!-- Delete Modal Pop-up -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Delete Confirmation</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>Are you Sure,You want to DELETE the Order?&hellip;</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="deleteOrderData(); modal.close('Close click');">Yes</button>
+    <button type="button" class="btn btn-light" (click)="modal.close('Close click'); clear()">Close</button>
+  </div>
+</ng-template>
