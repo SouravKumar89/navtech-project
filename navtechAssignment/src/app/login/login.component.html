@@ -1,0 +1,46 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-8">
+      <h3>Log IN!</h3>
+      <form class="form-horizontal" [formGroup]="loginForm" id="loginForm" name="loginForm"
+        (submit)="loginSubmit(loginForm.value)">
+        <div class="form-group">
+          <input type="text" formControlName="username" class="form-control" id="username"
+            placeholder="Enter User Name" maxlength="50">
+          <div
+            *ngIf="loginForm.controls.username.errors?.required  && (!loginForm.controls.username.pristine || submitButton)"
+            class="text-danger">
+            Please enter user name
+          </div>
+          <div *ngIf="loginForm.controls.username.errors?.pattern && !loginForm.controls.username.pritine"
+            class="text-danger">
+            Please enter user name with atleast one character and one number with minimum length of 4 letters
+          </div>
+
+        </div><br>
+        <div class="form-group">
+          <input type="password" formControlName="password" class="form-control" id="password"
+            placeholder="Password">
+          <div
+            *ngIf="loginForm.controls.password.errors?.required  && (!loginForm.controls.password.pristine || submitButton)"
+            class="text-danger">Please enter password</div>
+          <div *ngIf="loginForm.controls.password.errors?.pattern && !loginForm.controls.password.pritine"
+            class="text-danger">
+            Please enter passowrd with atleast one uppercase character, one lowercase character and one number and one
+            special character with minimum of length of 5 letters
+          </div>
+        </div>
+        <br>
+        <div class="form-group">
+          <input type="checkbox" />&nbsp;&nbsp;
+          <label>Remember me</label><br>
+          <div>
+            <button class="btn btn-primary loginBtn" type="submit">Submit</button>
+            <button class="btn btn-danger loginBtn" (click)="loginForm.reset()" type="button" style="margin-right: 5px;">Clear</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
